@@ -1,7 +1,34 @@
 # Sample - Registration - Auth - Login App
 
-構想：
+## とりあえず実行してみたい場合
+### DB(Postgresql、Redis) 立ち上げ
+```bash
+docker compose up -d
+```
 
+### postgres のコンテナ Id 確認
+```bash
+docker ps -a
+```
+
+### スキーマ適用
+```bash
+docker cp latest_schema.sql <postgre_container_id>:/
+docker exec -it <postgre_container_id> bash
+
+# Container 内
+psql "postgres://appuser:apppass@localhost:5432/appdb" -f latest_schema.sql
+exit
+
+# アプリルートディレクトリ
+npm run dev
+```
+
+動作確認：`localhost:3000`
+
+## 作成手順を追いたい場合
+
+構想：
 - アカウント作成（電話番号登録）
 - SMS認証（Twilio）
 - ログイン→ユーザー情報表示
@@ -48,16 +75,6 @@ Twilio
   - `sub` と `sessionId` のみを JWT に入れ、ユーザー情報は DB から取得
 - **App Router + Route Handlers**
   - Next.js 13+ の標準的な構成で、将来のバージョンでも保守しやすい形
-
-## Prompt
-
-```plaintext
-NextJS, Postgresql、Redis、Twilio でアカウント作成 -> SMS認証 -> ログイン -> ユーザー情報が表示される
-このようなものを作りたいです
-ユーザー情報の管理はJWTで管理し、タイムアウトは10分操作なしとしたいです
-最も情報が安全でコード品質が高い作成手順とコードを提示してください
-一度で実行でき、エラーがなく、それぞれのパッケージは最新のものお願いいたします
-```
 
 ## Create App
 

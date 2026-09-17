@@ -1,0 +1,35 @@
+CREATE TABLE IF NOT EXISTS users (
+  id SERIAL PRIMARY KEY,
+  phone VARCHAR(32),
+  name VARCHAR(128),
+  email VARCHAR(255) UNIQUE,
+  password_hash VARCHAR(255),
+  is_verified BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS sms_codes (
+  id SERIAL PRIMARY KEY,
+  phone VARCHAR(32) NOT NULL,
+  code VARCHAR(8) NOT NULL,
+  expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
+  used BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS verification_codes (
+  id SERIAL PRIMARY KEY,
+  identifier VARCHAR(255) NOT NULL,
+  code VARCHAR(8) NOT NULL,
+  expires_at TIMESTAMP NOT NULL,
+  used BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE UNIQUE INDEX users_email_unique
+ON users (email)
+WHERE email IS NOT NULL;
+
+CREATE UNIQUE INDEX users_phone_unique
+ON users (phone)
+WHERE phone IS NOT NULL;
