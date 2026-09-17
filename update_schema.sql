@@ -1,0 +1,22 @@
+ALTER TABLE users
+  ADD COLUMN email VARCHAR(255) UNIQUE,
+  ADD COLUMN password_hash VARCHAR(255),
+  ADD COLUMN is_verified BOOLEAN DEFAULT FALSE
+  ALTER COLUMN phone DROP NOT NULL;
+
+CREATE TABLE IF NOT EXISTS verification_codes (
+  id SERIAL PRIMARY KEY,
+  identifier VARCHAR(255) NOT NULL,
+  code VARCHAR(8) NOT NULL,
+  expires_at TIMESTAMP NOT NULL,
+  used BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE UNIQUE INDEX users_email_unique
+ON users (email)
+WHERE email IS NOT NULL;
+
+CREATE UNIQUE INDEX users_phone_unique
+ON users (phone)
+WHERE phone IS NOT NULL;
